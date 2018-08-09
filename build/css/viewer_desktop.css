@@ -6263,6 +6263,18 @@ a.goback-link {
 .rmwidget.widget-picture.inside-hotspot {
   overflow: hidden;
 }
+.rmwidget.widget-picture.svg {
+  pointer-events: none;
+}
+.rmwidget.widget-picture.svg svg path,
+.rmwidget.widget-picture.svg svg polygon,
+.rmwidget.widget-picture.svg svg ellipse,
+.rmwidget.widget-picture.svg svg circle,
+.rmwidget.widget-picture.svg svg line,
+.rmwidget.widget-picture.svg svg polyline,
+.rmwidget.widget-picture.svg svg rect {
+  pointer-events: visiblePainted;
+}
 .rmwidget.widget-picture img,
 .rmwidget.widget-picture svg,
 .rmwidget.widget-picture div {

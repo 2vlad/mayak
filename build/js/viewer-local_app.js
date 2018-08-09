@@ -2005,9 +2005,10 @@ Modernizr.addTest("retina", function() {
                     Modernizr.sessionstorage && window.sessionStorage.removeItem("rm.loginReturnUrl"), this.$('.login.ljr-panel #login_form input[name="url"]').val(t.constants.readymag_auth_host + (i || "/" + e.uri)), 
                     this.$(".login.ljr-panel #login_form").submit();
                 } else this.hideButtonPreloader(s), clearTimeout(this.wrongTimeout), this.$(".login.ljr-panel").addClass("wrong-login"), 
+                this.$(".login.ljr-panel .error").html("The email address does not have an associated Readymag account"), 
                 this.wrongTimeout = setTimeout(_.bind(function() {
                     this.$(".login.ljr-panel").removeClass("wrong-login");
-                }, this), 2e3), this.isdesktop || this.$el.scrollTop(9999);
+                }, this), 3500), this.isdesktop || this.$el.scrollTop(9999);
             }, this)));
         },
         requestLogin: function(e, i, s) {
@@ -6133,8 +6134,6 @@ var googleMapsAPICallbacks = [], facebookAPICallbacks = [], twitterAPICallbacks 
                 projectinfo: !0,
                 sharebutton: !0,
                 pagecounter: !0,
-                endpage: !0,
-                endpagetype: "join",
                 viewertype: "vertical",
                 slidein: !1
             };
@@ -6142,12 +6141,11 @@ var googleMapsAPICallbacks = [], facebookAPICallbacks = [], twitterAPICallbacks 
             "vertical" === i.viewertype && (Modernizr.isdesktop ? this.isStickyVerticalViewer = !i.slidein && !this.isPreview && !this.hasWidgetsWithVerticalOnscrollAnimation : (this.isStickyVerticalViewer = Modernizr.csspositionsticky, 
             this.isStickyVerticalViewer || (i.viewertype = "horizontal", this.pages.length > 1 && (i.arrows = !0)))), 
             i.sharebutton = i.sharebutton && !this.isPreview && !!this.published && !this.is_private, i.pagecounter = i.pagecounter && !this.isPreview && this.pages.length > 1, 
-            i.endpage = i.endpage && !this.isPreview && !!this.published, this.model.user && this.model.user.get && "540dc7a3a5c9259a383b910b" == this.model.user.get("_id") && (i = _.extend(i, {
+            this.model.user && this.model.user.get && "540dc7a3a5c9259a383b910b" == this.model.user.get("_id") && (i = _.extend(i, {
                 arrows: !0,
                 menubutton: this.isPreview,
                 sharebutton: !1,
-                pagecounter: !1,
-                endpage: !1
+                pagecounter: !1
             })), this.viewOpts = i, this.PRELOAD_COUNT = "horizontal" == this.viewOpts.viewertype ? this.PRELOAD_COUNT_HORIZONTAL : this.PRELOAD_COUNT_VERTICAL;
         },
         setViewerClasses: function() {
@@ -6202,19 +6200,7 @@ var googleMapsAPICallbacks = [], facebookAPICallbacks = [], twitterAPICallbacks 
                     router: this.router,
                     $container: this.$el,
                     isPreview: this.isPreview,
-                    hasFinalPage: this.viewOpts.endpage,
                     viewerType: this.viewOpts.viewertype
-                }).render()), this.viewOpts.endpage && (this.finalPage = new t.classes.FinalPage({
-                    me: this.router.me,
-                    mag: this,
-                    router: this.router,
-                    $container: this.$pages_container,
-                    isPreview: this.isPreview,
-                    isPrivate: this.is_private,
-                    viewerType: this.viewOpts.viewertype,
-                    finalPageType: this.viewOpts.endpagetype,
-                    isStickyVerticalViewer: this.isStickyVerticalViewer,
-                    recentMags: this.model.recentMags || _([])
                 }).render()), this.toolbar = new t.classes.Toolbar({
                     mag: this,
                     pages: this.pages,
@@ -9097,7 +9083,7 @@ var googleMapsAPICallbacks = [], facebookAPICallbacks = [], twitterAPICallbacks 
             e || this.picture.effectUrl || this.picture.editedVectorUrl || this.picture.url;
         },
         loadVector: function(t) {
-            this.svgAjax = $.get(t + "?c", _.bind(function(e) {
+            this.$el.addClass("svg"), this.svgAjax = $.get(t + "?c", _.bind(function(e) {
                 this.$svg = $(e).find("svg").attr("width", "").attr("height", "");
                 var i = $(e).find("svg").get(0).cloneNode(!0);
                 this.$svg.attr("viewBox");
@@ -10086,15 +10072,15 @@ window.onYouTubeIframeAPIReady = function() {
                 fields: []
             };
             return _.each(this.fields, function(t) {
-                var i = this.$(".js-input[data-sort=" + t.sort + "]").val().trim();
-                if ("number" == t.tp) {
-                    var s = parseFloat(i);
-                    i = isNaN(s) ? i : s;
+                var i = this.$(".js-input[data-sort=" + t.sort + "]"), s = i.val().trim();
+                if ("checkbox" == t.tp && (s = i.prop("checked") ? "On" : "Off"), "number" == t.tp) {
+                    var n = parseFloat(s);
+                    s = isNaN(n) ? s : n;
                 }
                 e.fields.push({
                     caption: t.caption,
                     type: t.tp,
-                    value: i
+                    value: s
                 });
             }.bind(this)), e;
         },
